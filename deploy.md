@@ -114,16 +114,23 @@ az webapp deploy --name chatapp-leewsimpson-backend --resource-group chatapp-rg 
 # Alternatively, for Windows PowerShell:
 # Compress-Archive -Path .\BackEnd\* -DestinationPath backend.zip
 # az webapp deploy --name chatapp-leewsimpson-backend --resource-group chatapp-rg --src-path backend.zip
+
+# Note: The BackEnd directory contains a .deployment file that tells Azure App Service
+# to use the startup.sh script for deployment. This helps ensure that dependencies
+# like uvicorn are properly installed.
 ```
 
 ### 4. Configure Startup Command
 
 ```bash
-# Set startup command for the FastAPI app
-az webapp config set --name chatapp-leewsimpson-backend --resource-group chatapp-rg --startup-file "gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000"
+# Make the startup script executable
+chmod +x BackEnd/startup.sh
 
-# Make sure gunicorn is in requirements.txt
-echo "gunicorn" >> requirements.txt
+# Set startup command for the FastAPI app to use the startup script
+az webapp config set --name chatapp-leewsimpson-backend --resource-group chatapp-rg --startup-file "startup.sh"
+
+# Note: The startup.sh script will install dependencies and start the app
+# This helps ensure all dependencies like uvicorn are properly installed
 ```
 
 ## WebApp Deployment

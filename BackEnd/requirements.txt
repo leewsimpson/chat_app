@@ -3,4 +3,4 @@ pydantic
 python-dotenv
 openai-agents
 gunicorn
-uvicorn[standard]
+uvicorn
