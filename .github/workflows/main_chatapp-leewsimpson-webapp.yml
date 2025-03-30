@@ -30,6 +30,9 @@ jobs:
         env:
           API_URL: http://chatapp-leewsimpson-backend.azurewebsites.net/api/message_stream
 
+      - name: Make startup script executable
+        run: chmod +x ./WebApp/startup.sh
+
       - name: Zip artifact for deployment (only /WebApp)
         run: |
           cd WebApp
@@ -60,6 +63,10 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release-webapp.zip
 
+      - name: Install dependencies
+        run: npm install --production
+        # This ensures the dependencies are installed in the correct directory
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -74,3 +81,7 @@ jobs:
           app-name: "chatapp-leewsimpson-webapp"
           slot-name: "Production"
           package: .
+
+      - name: Set startup command
+        run: |
+          az webapp config set --resource-group chatapp-leewsimpson-rg --name chatapp-leewsimpson-webapp --startup-file startup.sh
