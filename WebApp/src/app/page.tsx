@@ -104,14 +104,14 @@ export default function Home() {
 
       // Fetch streaming response from the Python backend API
       await fetchBotResponseStreaming(text, handleChunk);
-    } catch (_error) {
+    } catch {
       // Update the bot message with an error
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
           msg.id === botMessageId
             ? {
                 ...msg,
-                text: "Sorry, I encountered an error. Please try again later. ${_error}",
+                text: "Sorry, I encountered an error. Please try again later.",
               }
             : msg
         )
