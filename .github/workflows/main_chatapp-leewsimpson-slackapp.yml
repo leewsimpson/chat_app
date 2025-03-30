@@ -33,21 +33,8 @@ jobs:
 
       - name: Prepare files for deployment
         run: |
-          # Create a temporary directory for deployment
-          mkdir -p temp-deploy
-
-          # Copy only the necessary files to maintain the correct structure
-          cp SlackApp/package.json temp-deploy/
-          cp SlackApp/package-lock.json temp-deploy/
-          mkdir -p temp-deploy/dist
-          cp -r SlackApp/dist/* temp-deploy/dist/
-
-          # Copy any other necessary files (e.g., configuration files)
-          # If you have other files that need to be included, add them here
-
-          # Create the zip file from the temp directory
-          cd temp-deploy
-          zip -r ../release-slack.zip .
+          cd SlackApp
+          zip -r ../release-slack.zip . -x "venv/**"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
