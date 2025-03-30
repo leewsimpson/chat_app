@@ -49,13 +49,17 @@ app.event("app_mention", async ({ event, client, say }) => {
     // Generate a response using the Python FastAPI backend
     const response = await fetchBotResponse(text);
 
-    // Respond to the mention
-    await say(`<@${event.user}>, ${response}`);
+    // Respond to the mention in the thread
+    await say({
+      text: `<@${event.user}>, ${response}`,
+      thread_ts: event.ts, // This ensures the reply is in the thread of the mention
+    });
   } catch (error) {
     console.error("Error handling app_mention event:", error);
-    await say(
-      `<@${event.user}>, Sorry, I encountered an error. Please try again later.`
-    );
+    await say({
+      text: `<@${event.user}>, Sorry, I encountered an error. Please try again later.`,
+      thread_ts: event.ts, // Keep error responses in thread too
+    });
   }
 });
 

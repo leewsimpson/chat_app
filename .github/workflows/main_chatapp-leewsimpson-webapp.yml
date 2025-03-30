@@ -81,7 +81,3 @@ jobs:
           app-name: "chatapp-leewsimpson-webapp"
           slot-name: "Production"
           package: .
-
-      - name: Set startup command
-        run: |
-          az webapp config set --resource-group chatapp-leewsimpson-rg --name chatapp-leewsimpson-webapp --startup-file startup.sh
