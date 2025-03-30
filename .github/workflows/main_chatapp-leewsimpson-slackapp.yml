@@ -1,0 +1,74 @@
+name: Build and deploy Node.js app to Azure Web App - chatapp-leewsimpson-slackapp
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install dependencies
+        working-directory: ./SlackApp
+        run: npm install
+
+      - name: Build TypeScript
+        working-directory: ./SlackApp
+        run: npm run build
+
+      - name: Zip artifact for deployment (only /SlackApp)
+        run: |
+          cd SlackApp
+          zip -r ../release-slack.zip . -x "node_modules/**"
+
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-app
+          path: release-slack.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: "Production"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: node-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release-slack.zip
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_02C50E9CFEA447FB845C290A40695348 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_094A901DA7894BC7831F3FA14B8A2AB1 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A221662E58A84CD9827CA7496E7C36E8 }}
+
+      - name: "Deploy to Azure Web App"
+        uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
+        with:
+          app-name: "chatapp-leewsimpson-slackapp"
+          slot-name: "Production"
+          package: .
