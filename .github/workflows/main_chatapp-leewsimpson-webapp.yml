@@ -31,7 +31,7 @@ jobs:
         working-directory: ./WebApp
         run: npm run build
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.API_URL }}
+          API_URL: http://chatapp-leewsimpson-backend.azurewebsites.net/api/message_stream
 
       - name: Zip artifact for deployment (only /WebApp)
         run: |
