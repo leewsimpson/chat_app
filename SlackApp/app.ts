@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { App } from "@slack/bolt";
 import fetch from "node-fetch";
+import http from "http";
 
 // Load environment variables
 dotenv.config();
@@ -58,12 +59,26 @@ app.event("app_mention", async ({ event, client, say }) => {
   }
 });
 
+// Create HTTP server for Azure health checks
+http
+  .createServer((req, res) => {
+    res.writeHead(200);
+    res.end("OK");
+  })
+  .listen(process.env.PORT || 8080, () => {
+    console.log(
+      `Health check server running on port ${process.env.PORT || 8080}`
+    );
+  });
+
 // Start the app
 (async () => {
   try {
     // Start your app
-    await app.start(process.env.PORT ? parseInt(process.env.PORT) : 3000);
-    console.log("⚡️ Bolt app is running!");
+    // Use a different port for the Slack socket connection if PORT is being used by the HTTP server
+    const slackAppPort = process.env.SLACK_APP_PORT || 3000;
+    await app.start(slackAppPort);
+    console.log(`⚡️ Bolt app is running on port ${slackAppPort}!`);
   } catch (error) {
     console.error("Error starting app:", error);
   }
