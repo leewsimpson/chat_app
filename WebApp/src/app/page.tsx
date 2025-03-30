@@ -30,44 +30,36 @@ export default function Home() {
     userInput: string,
     onChunk: (chunk: string) => void
   ): Promise<void> => {
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: userInput }),
-      });
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: userInput }),
+    });
 
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    // Get the reader from the response body stream
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error("Failed to get reader from response");
+    }
+
+    // Read the stream
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+
+      if (value) {
+        const chunk = decoder.decode(value, { stream: true });
+        onChunk(chunk);
       }
-
-      // Get the reader from the response body stream
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error("Failed to get reader from response");
-      }
-
-      // Read the stream
-      const decoder = new TextDecoder();
-      let done = false;
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-
-        if (value) {
-          const chunk = decoder.decode(value, { stream: true });
-          onChunk(chunk);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching bot response:", error);
-      onChunk(
-        "Sorry, I'm having trouble connecting to my backend. Please try again later."
-      );
-      throw error;
     }
   };
 
@@ -112,14 +104,14 @@ export default function Home() {
 
       // Fetch streaming response from the Python backend API
       await fetchBotResponseStreaming(text, handleChunk);
-    } catch (error) {
+    } catch (_error) {
       // Update the bot message with an error
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
           msg.id === botMessageId
             ? {
                 ...msg,
-                text: "Sorry, I encountered an error. Please try again later.",
+                text: "Sorry, I encountered an error. Please try again later. ${_error}",
               }
             : msg
         )
