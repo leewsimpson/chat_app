@@ -1,4 +1,4 @@
-name: Build and deploy Next.js app to Azure Web App - chatapp-leewsimpson-webapp
+name: Build and deploy WebApp
 
 on:
   push:
