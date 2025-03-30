@@ -22,7 +22,8 @@ export default function Home() {
   const messageListRef = useRef<HTMLDivElement>(null);
 
   // API URL for the Python FastAPI backend
-  const API_URL = "http://localhost:8000/api/message_stream";
+  const API_URL =
+    process.env.API_URL || "http://localhost:8000/api/message_stream";
 
   // Function to handle streaming response from the Python backend API
   const fetchBotResponseStreaming = async (

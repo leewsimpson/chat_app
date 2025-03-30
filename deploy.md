@@ -139,14 +139,14 @@ az webapp config set --name chatapp-leewsimpson-backend --resource-group chatapp
 
 ```bash
 # Create Static Web App
-az staticwebapp create --name chatapp-webapp --resource-group chatapp-rg --location "australiasoutheast" --source https://github.com/yourusername/ChatApp --branch main --app-location "WebApp" --output-location ".next" --login-with-github
+az staticwebapp create --name chatapp-leewsimpson-webapp --resource-group chatapp-rg --location "australiasoutheast" --source https://github.com/yourusername/ChatApp --branch main --app-location "WebApp" --output-location ".next" --login-with-github
 ```
 
 ### 2. Configure WebApp Environment Variables
 
 ```bash
 # Set environment variables for WebApp
-az staticwebapp appsettings set --name chatapp-webapp --resource-group chatapp-rg --setting-names NEXT_PUBLIC_API_URL="https://chatapp-leewsimpson-backend.azurewebsites.net/api"
+az staticwebapp appsettings set --name chatapp-leewsimpson-webapp --resource-group chatapp-rg --setting-names NEXT_PUBLIC_API_URL="https://chatapp-leewsimpson-backend.azurewebsites.net/api"
 ```
 
 ### 3. Configure Build Settings
@@ -202,7 +202,7 @@ npm --prefix WebApp run build
 
 # For Static Web Apps, you can deploy using the Azure CLI or GitHub Actions
 # Option 1: Deploy using the Azure CLI (if you're not using GitHub)
-az staticwebapp deploy --name chatapp-webapp --resource-group chatapp-rg --source WebApp --location ".next" --api-location ""
+az staticwebapp deploy --name chatapp-leewsimpson-webapp --resource-group chatapp-rg --source WebApp --location ".next" --api-location ""
 
 # Option 2: If using GitHub, the deployment will happen automatically through GitHub Actions
 # Make sure your GitHub repository is connected to the Static Web App
@@ -310,7 +310,7 @@ az keyvault set-policy --name chatapp-keyvault --object-id $SLACKAPP_PRINCIPAL_I
 
 ```bash
 # Configure CORS for Backend
-az webapp cors add --name chatapp-leewsimpson-backend --resource-group chatapp-rg --allowed-origins "https://chatapp-webapp.azurestaticapps.net"
+az webapp cors add --name chatapp-leewsimpson-backend --resource-group chatapp-rg --allowed-origins "https://chatapp-leewsimpson-webapp.azurestaticapps.net"
 ```
 
 ## Networking and Security

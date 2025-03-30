@@ -50,6 +50,10 @@ cd WebApp
 # Install dependencies
 npm install
 
+# Configure environment variables
+# Create a .env.local file with the following content:
+# API_URL=http://localhost:8000/api/message_stream
+
 # Run the development server
 npm run dev
 ```
