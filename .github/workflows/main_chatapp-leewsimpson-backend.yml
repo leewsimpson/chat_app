@@ -1,4 +1,4 @@
-name: Build and deploy Python app to Azure Web App - chatapp-leewsimpson-backend
+name: Build and deploy BackEnd
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Create and start virtual environment
         working-directory: ./BackEnd
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write
@@ -67,10 +67,10 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_094A901DA7894BC7831F3FA14B8A2AB1 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A221662E58A84CD9827CA7496E7C36E8 }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'chatapp-leewsimpson-backend'
-          slot-name: 'Production'
+          app-name: "chatapp-leewsimpson-backend"
+          slot-name: "Production"
           package: .

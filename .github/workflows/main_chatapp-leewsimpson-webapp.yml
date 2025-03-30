@@ -1,4 +1,4 @@
-name: Build and deploy SlackApp
+name: Build and deploy Next.js app to Azure Web App - chatapp-leewsimpson-webapp
 
 on:
   push:
@@ -21,23 +21,23 @@ jobs:
           node-version: "18.x"
 
       - name: Install dependencies
-        working-directory: ./SlackApp
+        working-directory: ./WebApp
         run: npm install
 
-      - name: Build TypeScript
-        working-directory: ./SlackApp
+      - name: Build Next.js application
+        working-directory: ./WebApp
         run: npm run build
 
-      - name: Zip artifact for deployment (only /SlackApp)
+      - name: Zip artifact for deployment (only /WebApp)
         run: |
-          cd SlackApp
-          zip -r ../release-slack.zip . -x "node_modules/**"
+          cd WebApp
+          zip -r ../release-webapp.zip .next package.json next.config.ts public -x "node_modules/**"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: release-slack.zip
+          name: nextjs-app
+          path: release-webapp.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,10 +53,10 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: nextjs-app
 
       - name: Unzip artifact for deployment
-        run: unzip release-slack.zip
+        run: unzip release-webapp.zip
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -69,6 +69,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: "chatapp-leewsimpson-slackapp"
+          app-name: "chatapp-leewsimpson-webapp"
           slot-name: "Production"
           package: .

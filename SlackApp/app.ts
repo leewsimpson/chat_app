@@ -14,7 +14,7 @@ const app = new App({
 });
 
 // API URL for the Python FastAPI backend
-const API_URL = "http://localhost:8000/api/message";
+const API_URL = process.env.API_URL || "http://localhost:8000/api/message";
 
 // Function to fetch response from the Python backend API
 async function fetchBotResponse(userInput: string): Promise<string> {

@@ -214,14 +214,14 @@ az staticwebapp deploy --name chatapp-webapp --resource-group chatapp-rg --sourc
 
 ```bash
 # Create App Service for SlackApp
-az webapp create --name chatapp-slackapp --resource-group chatapp-rg --plan chatapp-plan --runtime "NODE:18-lts"
+az webapp create --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --plan chatapp-plan --runtime "NODE:18-lts"
 ```
 
 ### 2. Configure SlackApp Environment Variables
 
 ```bash
 # Set environment variables for SlackApp
-az webapp config appsettings set --name chatapp-slackapp --resource-group chatapp-rg --settings SLACK_BOT_TOKEN="@Microsoft.KeyVault(SecretUri=https://chatapp-keyvault.vault.azure.net/secrets/SLACK-BOT-TOKEN)" SLACK_SIGNING_SECRET="@Microsoft.KeyVault(SecretUri=https://chatapp-keyvault.vault.azure.net/secrets/SLACK-SIGNING-SECRET)" SLACK_APP_TOKEN="@Microsoft.KeyVault(SecretUri=https://chatapp-keyvault.vault.azure.net/secrets/SLACK-APP-TOKEN)" API_URL="https://chatapp-leewsimpson-backend.azurewebsites.net/api/message" PORT=8080
+az webapp config appsettings set --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --settings SLACK_BOT_TOKEN="@Microsoft.KeyVault(SecretUri=https://chatapp-keyvault.vault.azure.net/secrets/SLACK-BOT-TOKEN)" SLACK_SIGNING_SECRET="@Microsoft.KeyVault(SecretUri=https://chatapp-keyvault.vault.azure.net/secrets/SLACK-SIGNING-SECRET)" SLACK_APP_TOKEN="@Microsoft.KeyVault(SecretUri=https://chatapp-keyvault.vault.azure.net/secrets/SLACK-APP-TOKEN)" API_URL="https://chatapp-leewsimpson-backend.azurewebsites.net/api/message" PORT=8080
 ```
 
 ### 3. Update API URL in SlackApp
@@ -247,18 +247,18 @@ npm --prefix SlackApp run build
 zip -r slackapp.zip SlackApp
 
 # Deploy using zip deployment
-az webapp deploy --name chatapp-slackapp --resource-group chatapp-rg --src-path slackapp.zip
+az webapp deploy --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --src-path slackapp.zip
 
 # Alternatively, for Windows PowerShell:
 # Compress-Archive -Path .\SlackApp\* -DestinationPath slackapp.zip
-# az webapp deploy --name chatapp-slackapp --resource-group chatapp-rg --src-path slackapp.zip
+# az webapp deploy --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --src-path slackapp.zip
 ```
 
 ### 5. Configure Startup Command
 
 ```bash
 # Set startup command for the SlackApp
-az webapp config set --name chatapp-slackapp --resource-group chatapp-rg --startup-file "node dist/app.js"
+az webapp config set --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --startup-file "node dist/app.js"
 ```
 
 ## Environment Configuration
@@ -273,10 +273,10 @@ az webapp identity assign --name chatapp-leewsimpson-backend --resource-group ch
 BACKEND_PRINCIPAL_ID=$(az webapp identity show --name chatapp-leewsimpson-backend --resource-group chatapp-rg --query principalId --output tsv)
 
 # Enable managed identity for SlackApp
-az webapp identity assign --name chatapp-slackapp --resource-group chatapp-rg
+az webapp identity assign --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg
 
 # Get the principal ID
-SLACKAPP_PRINCIPAL_ID=$(az webapp identity show --name chatapp-slackapp --resource-group chatapp-rg --query principalId --output tsv)
+SLACKAPP_PRINCIPAL_ID=$(az webapp identity show --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --query principalId --output tsv)
 
 # Grant access to Key Vault
 # Option 1: If Key Vault was created WITHOUT --enable-rbac-authorization (using access policies)
@@ -311,7 +311,7 @@ az network vnet create --name chatapp-vnet --resource-group chatapp-rg --address
 az webapp vnet-integration add --name chatapp-leewsimpson-backend --resource-group chatapp-rg --vnet chatapp-vnet --subnet default
 
 # Integrate SlackApp with VNet
-az webapp vnet-integration add --name chatapp-slackapp --resource-group chatapp-rg --vnet chatapp-vnet --subnet default
+az webapp vnet-integration add --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --vnet chatapp-vnet --subnet default
 ```
 
 ### 2. Configure Private Endpoints (Optional)
@@ -328,7 +328,7 @@ az network private-endpoint create --name chatapp-keyvault-pe --resource-group c
 az webapp update --name chatapp-leewsimpson-backend --resource-group chatapp-rg --https-only true
 
 # Enable HTTPS Only for SlackApp
-az webapp update --name chatapp-slackapp --resource-group chatapp-rg --https-only true
+az webapp update --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --https-only true
 ```
 
 ## Monitoring and Maintenance
@@ -346,7 +346,7 @@ INSTRUMENTATION_KEY=$(az monitor app-insights component show --app chatapp-insig
 az webapp config appsettings set --name chatapp-leewsimpson-backend --resource-group chatapp-rg --settings APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=$INSTRUMENTATION_KEY"
 
 # Configure SlackApp with Application Insights
-az webapp config appsettings set --name chatapp-slackapp --resource-group chatapp-rg --settings APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=$INSTRUMENTATION_KEY"
+az webapp config appsettings set --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --settings APPLICATIONINSIGHTS_CONNECTION_STRING="InstrumentationKey=$INSTRUMENTATION_KEY"
 ```
 
 ### 2. Set Up Alerts
