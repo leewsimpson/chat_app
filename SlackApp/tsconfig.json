@@ -8,14 +8,8 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "baseUrl": "../",
-    "paths": {
-      "@backend/*": ["BackEnd/*"]
-    },
-    "composite": true,
-    "declaration": true,
-    "rootDir": ".."
+    "baseUrl": "."
   },
-  "include": ["**/*.ts", "../BackEnd/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -243,14 +243,28 @@ cd c:/Github/ChatApp
 npm --prefix SlackApp install
 npm --prefix SlackApp run build
 
-# Package the SlackApp directory
-zip -r slackapp.zip SlackApp
+# Prepare files for deployment with the correct structure
+mkdir -p temp-deploy
+cp SlackApp/package.json temp-deploy/
+cp SlackApp/package-lock.json temp-deploy/
+mkdir -p temp-deploy/dist
+cp -r SlackApp/dist/* temp-deploy/dist/
+
+# Package the prepared directory
+cd temp-deploy
+zip -r ../slackapp.zip .
+cd ..
 
 # Deploy using zip deployment
 az webapp deploy --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --src-path slackapp.zip
 
 # Alternatively, for Windows PowerShell:
-# Compress-Archive -Path .\SlackApp\* -DestinationPath slackapp.zip
+# mkdir -p temp-deploy
+# Copy-Item -Path .\SlackApp\package.json -Destination .\temp-deploy\
+# Copy-Item -Path .\SlackApp\package-lock.json -Destination .\temp-deploy\
+# New-Item -ItemType Directory -Path .\temp-deploy\dist -Force
+# Copy-Item -Path .\SlackApp\dist\* -Destination .\temp-deploy\dist\ -Recurse
+# Compress-Archive -Path .\temp-deploy\* -DestinationPath slackapp.zip
 # az webapp deploy --name chatapp-leewsimpson-slackapp --resource-group chatapp-rg --src-path slackapp.zip
 ```
 
