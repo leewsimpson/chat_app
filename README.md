@@ -4,7 +4,7 @@ This project consists of a chat application with a Python FastAPI backend that s
 
 ## Project Structure
 
-- **BackEnd/python_backend/**: Python FastAPI backend that provides chat response functionality
+- **BackEnd/**: Python FastAPI backend that provides chat response functionality
 - **WebApp/**: Next.js web application that consumes the backend API
 - **SlackApp/**: Slack bot application that also consumes the backend API
 
@@ -14,7 +14,7 @@ This project consists of a chat application with a Python FastAPI backend that s
 
 ```bash
 # Navigate to the Python backend directory
-cd BackEnd/python_backend
+cd BackEnd
 
 # Create a virtual environment (recommended)
 python -m venv venv
@@ -75,15 +75,4 @@ npm run dev
 - `POST /api/message`: Process a user message and return a bot response
   - Request body: `{ "text": "your message here" }`
   - Response: `{ "response": "bot response here" }`
-
-## Refactoring Notes
-
-This project was refactored from a TypeScript backend to a Python FastAPI backend. The key changes include:
-
-1. Ported the `generateBotResponse` function from TypeScript to Python
-2. Created a FastAPI server to expose this functionality as an API endpoint
-3. Updated both the WebApp and SlackApp to make HTTP requests to this API instead of importing the function directly
-
-## Development
-
-To make changes to the backend logic, modify the `bot_logic.py` file in the `BackEnd/python_backend` directory.
+- `POST /api/message_stream`: Process a user message and return a bot response streaming
