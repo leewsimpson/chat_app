@@ -2,3 +2,5 @@ fastapi
 pydantic
 python-dotenv
 openai-agents
+gunicorn
+uvicorn
