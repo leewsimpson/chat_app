@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -46,21 +48,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
           disabled={!input.trim()} // Disable button if input is empty
           className="absolute right-2 bottom-2 p-2 bg-transparent text-gray-500 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-1 focus:ring-gray-400"
         >
-          {/* Send Icon (SVG or similar could be added here) */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faPaperPlane} className="w-5 h-5" />
         </button>
       </div>
     </form>
