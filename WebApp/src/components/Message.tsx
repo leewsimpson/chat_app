@@ -16,7 +16,7 @@ const Message: React.FC<MessageProps> = ({ text, sender }) => {
     <div className={`flex mb-4 ${isUser ? "justify-end" : "justify-start"}`}>
       <div className={`p-3 rounded-lg max-w-xl ${messageClass}`}>
         {/* Simple text display for now. Could add markdown support later. */}
-        {text}
+        <div style={{ whiteSpace: "pre-wrap" }}>{text}</div>
       </div>
     </div>
   );
